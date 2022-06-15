@@ -8,7 +8,7 @@ async function produitInfos() {
             method: "GET"
         })
 
-        var donnees = await requete.json();
+        let donnees = await requete.json();
 
         for(x of donnees) {
             console.log(x.altTxt);
