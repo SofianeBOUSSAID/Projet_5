@@ -100,35 +100,4 @@ ajout.addEventListener("click",()=>{
     saveBasket(panier)
 });
 
-/*
-let pan = JSON.parse(localStorage.getItem('panier'));
-let quantite = parseInt(document.querySelector("#quantity").value);
-let couleurChoisie = document.querySelector('#colors').value;
-article = new Article(id, quantite, couleurChoisie);
-if (0 >= quantite || quantite > 100 || couleurChoisie == "") {
-    return alert('Selectionnez entre 1 et 100 articles et une couleur.');
-}
-if (!localStorage.getItem("panier")) {
-    panier.push(article);
-    return localStorage.setItem('panier', JSON.stringify(panier));
-}
-else if(pan.length>0) {
-    for(x of pan){
-        console.log(x);
-        if (x.id == article.id && x.couleur == article.couleur) {
-            // parseInt(x.quantite) += parseInt(quantite);
-            x.quantite = parseInt(x.quantite) + parseInt(quantite);
-            x.quantite >100 && (x.quantite = 100, alert("Nombre d'article maximum dépassé, nombre actualisé à 1OO."));
-            // Short circuit
-            localStorage.setItem('panier', JSON.stringify(pan));
-            return alert("Sélection ajoutée au panier.");
-        }
-        
-    }
-}
-pan.push(article);
-return localStorage.setItem('panier', JSON.stringify(pan));
-*/
-
-
 
