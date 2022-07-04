@@ -29,6 +29,15 @@ let urlApi = "http://localhost:3000/api/products/";
 const prixTotalCalcul = [];
 const quantiteTotalCalcul = [];
 
+const firstNameErr = document.getElementById('firstNameErrorMsg');
+const lastNameErr = document.getElementById('lastNameErrorMsg');
+const addressErr = document.getElementById('addressErrorMsg');
+const cityErr = document.getElementById('cityErrorMsg');
+const emailErr = document.getElementById('emailErrorMsg');
+const nameRegex = /^[A-zÀ-ú' -]*$/;
+const addressRegex = /([0-9]{1,}) ?([A-zÀ-ú,' -\. ]*)/;
+const mailRegex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+
 function getBasket() {
     const panier = JSON.parse(localStorage.getItem('panier'));
     return panier || [];
@@ -47,7 +56,6 @@ function updateBasketItem(item, newQuantity) {
     if (index >= 0) {
         basket[index].quantite = parseInt(newQuantity)
         quantiteTotalCalcul[index] = parseInt(newQuantity)
-        console.log(quantiteTotalCalcul)
         saveBasket(basket);
     }
 }
@@ -58,7 +66,6 @@ function deleteItem(article, item) {
     console.log(`L'article ${item.id} de couleur ${item.couleur} a bien été supprimé.`)
     const panier = getBasket();
     const index = panier.findIndex(article => { return article.id == item.id && article.couleur == item.couleur} )
-    console.log(panier[index]);
     
     panier.splice(index,1);
     saveBasket(panier);
@@ -75,8 +82,7 @@ function totalCalcul(){
     }
     document.getElementById('totalQuantity').textContent = totalQuantity;
     document.getElementById('totalPrice').textContent = totalPrice;
-    console.log(totalPrice)
-    }
+}
 
 // Fontion d'affichage de l'article
 
@@ -162,3 +168,101 @@ async function infos() {
     }
 }
 infos();
+
+// Afficher le panier et le modifier ok
+
+// class contact{ 
+//     constructor (firstName, lastName, address, city, email){
+//         this.firstName = prenom.value,
+//         this.lastName = nom.value,
+//         this.address = adresse.value,
+//         this.city = ville.value,
+//         this.email = email.value
+//     }
+// }
+
+let order = document.querySelector("#order");
+let prenom = document.querySelector("#firstName");
+let nom = document.querySelector("#lastName");
+let adresse = document.querySelector("#address");
+let ville = document.querySelector("#city");
+let adresseMail = document.querySelector("#email");
+let form = document.querySelector('.cart__order__form')
+
+
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    let error = false;
+    let firstName = prenom.value;
+    let lastName = nom.value;
+    let address = adresse.value;
+    let city = ville.value;
+    let email = adresseMail.value
+    if (!firstName.match(nameRegex)) {
+        firstNameErr.innerHTML = 'Prénom invalide';
+        error = false;
+    }
+    if (!lastName.match(nameRegex)) {
+        lastNameErr.innerHTML = 'Nom invalide';
+        error = true;
+    }
+    if (!address.match(addressRegex)) {
+        addressErr.innerHTML = 'Adresse invalide';
+        error = true;
+    }
+    if (!city.match(nameRegex)) {
+        cityErr.innerHTML = 'Ville invalide';
+        error = true;
+    }
+    if (!email.match(mailRegex)) {
+        emailErr.innerHTML = 'Email invalide';
+        error = true;
+    }
+    if (error === true) {return alert('Certains champs sont incorrect')}
+    
+    let contact = {
+        firstName,
+        lastName,
+        address,
+        city,
+        email
+    };
+
+    console.log(contact);
+    
+    let products = [];
+    for (article of panier) {
+        products.push(article.id)
+    }
+    console.log(products);
+    const params = {
+        method: "POST",
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        },
+        
+        body: JSON.stringify({
+            products,
+            contact
+        })
+    }
+    
+async function passerCommande(){
+const requete = await fetch("http://localhost:3000/api/products/order", params);
+
+if (!requete.ok) {
+    alert("Une erreur est survenue.");
+} else {
+    const donnees = await requete.json();
+    console.log(donnees);
+    localStorage.removeItem('panier')
+    location.href = './confirmation.html?id= ' + donnees.orderId;
+
+}
+}
+
+passerCommande()
+
+})
