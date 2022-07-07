@@ -98,6 +98,7 @@ ajout.addEventListener("click",()=>{
     }
     
     saveBasket(panier)
+    alert("Selection ajoutée au panier.")
 });
 
 
