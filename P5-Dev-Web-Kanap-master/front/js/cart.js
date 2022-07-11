@@ -56,6 +56,9 @@ function updateBasketItem(item, newQuantity) {
     if (index >= 0) {
         basket[index].quantite = parseInt(newQuantity)
         quantiteTotalCalcul[index] = parseInt(newQuantity)
+        if(basket[index].quantite > 100){
+            basket[index].quantite = 100;
+        }
         saveBasket(basket);
     }
 }
@@ -201,7 +204,7 @@ form.addEventListener('submit', async (e) => {
     let email = adresseMail.value
     if (!firstName.match(nameRegex)) {
         firstNameErr.innerHTML = 'Prénom invalide';
-        error = false;
+        error = true;
     }
     if (!lastName.match(nameRegex)) {
         lastNameErr.innerHTML = 'Nom invalide';

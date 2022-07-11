@@ -1,6 +1,7 @@
+// Je récupère l'url de l'API
 const url = "http://localhost:3000/api/products";
 
-
+// J'utilise une fonction async pour récuperer les données de l'API
 async function produitInfos() {
     
     try {
@@ -8,8 +9,10 @@ async function produitInfos() {
             method: "GET"
         })
 
+        // Je stock la réponse dans la variable "donnees"
         let donnees = await requete.json();
 
+        // J'utilise une boucle "for of" pour créer des éléments pour chacun des produits présent dans l'API
         for(x of donnees) {
             let lien = document.createElement('a');
             lien.href =  `./product.html?id=${x._id}`;
@@ -35,8 +38,10 @@ async function produitInfos() {
             article.append(description);
         }
     } catch {
+        // Si il problème survient une alert apparait
         alert("Une erreur est survenue !");
     }
 }
 
+//J'exécute la fonction
 produitInfos();
